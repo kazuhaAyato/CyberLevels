@@ -111,7 +111,7 @@ public class MySQL {
                 }
             }
 
-            if (!isMyColumnPresent) {
+            if (!isMyColumnPresent)  {
                 statement.executeUpdate("ALTER TABLE " + table + " ADD " + column + " " + type + " NULL");
             }
         } catch (Exception e) {

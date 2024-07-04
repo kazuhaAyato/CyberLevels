@@ -7,7 +7,6 @@ import net.zerotoil.dev.cyberlevels.commands.CLVTabComplete;
 import net.zerotoil.dev.cyberlevels.listeners.AntiAbuseListeners;
 import net.zerotoil.dev.cyberlevels.listeners.EXPListeners;
 import net.zerotoil.dev.cyberlevels.listeners.JoinListener;
-import net.zerotoil.dev.cyberlevels.listeners.hooks.RivalHarvesterHoesHook;
 import net.zerotoil.dev.cyberlevels.objects.exp.EXPCache;
 import net.zerotoil.dev.cyberlevels.objects.levels.LevelCache;
 import net.zerotoil.dev.cyberlevels.objects.files.Files;
@@ -32,9 +31,11 @@ public final class CyberLevels extends JavaPlugin {
     private EXPCache expCache;
 
     private EXPListeners expListeners;
+    public static CyberLevels instance;
 
     @Override
     public void onEnable() {
+        instance = this;
         final long startTime = System.currentTimeMillis();
         logger = new Logger(this);
 
@@ -50,10 +51,6 @@ public final class CyberLevels extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
             new PlaceholderAPI(this).register();
 
-        if (Bukkit.getPluginManager().getPlugin("RivalHarvesterHoes") != null) {
-            logger("&7Hooked into &bRivalHarvesterHoes&7.");
-            new RivalHarvesterHoesHook(this);
-        }
 
         new Metrics(this, 13782, this);
         logger("&7Loaded &dCLV v" + getDescription().getVersion() + "&7 in &a" +

@@ -26,7 +26,16 @@ public class LevelUtils {
         loadUtility();
         useSpecificFormula = levelsYML().isConfigurationSection("levels.experience.level");
     }
-
+    public String colorize(long l) {
+        if(l < 128) return "§7" + l;
+        if(l < 256) return "§f" + l;
+        if(l < 512) return "§3" + l;
+        if(l < 1024) return "§b" + l;
+        if(l < 2048) return "§6" + l;
+        if(l < 4096) return "§e" + l;
+        if(l < 8192) return "§4" + l;
+        return "§9" + l;
+    }
     private void loadUtility() {
         if (main.files().getConfig("config").isConfigurationSection("config.round-evaluation") &&
                 main.files().getConfig("config").getBoolean("config.round-evaluation.enabled")) {
@@ -79,7 +88,13 @@ public class LevelUtils {
         //if (decimalFormat.toPattern().equals("#")) return (int) value + "";
         return decimalFormat.format(value).replace(",", ".");
     }
-
+    public String roundtoK(double val){
+        if(val < 1000) return val + "";
+        if(val < 1000000) return roundDecimal(val/1000) + "k";
+        if(val < 1000000000) return roundDecimal(val/1000000) + "m";
+        if(val < 1000000000000L) return roundDecimal(val/1000000000) + "b";
+        return roundDecimal(val/1000000000000L) + "t";
+    }
     public String progressBar(Double exp, Double requiredExp) {
         if (requiredExp == 0) return startBar + bar + middleBar + endBar;
         int completion = Math.min((int) ((exp / requiredExp) * bar.length()), bar.length());

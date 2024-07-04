@@ -69,18 +69,31 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
         if (identifier.equalsIgnoreCase("player_level"))
             return playerLevel.getLevel() + "";
-
+        
+        if(identifier.equalsIgnoreCase("player_level_colored"))
+            return main.levelUtils().colorize(playerLevel.getLevel());
+        
         if (identifier.equalsIgnoreCase("player_level_next"))
             return Math.min(playerLevel.getLevel() + 1, main.levelCache().maxLevel()) + "";
 
         if (identifier.equalsIgnoreCase("player_exp"))
             return main.levelUtils().roundStringDecimal(playerLevel.getExp());
 
+        if (identifier.equalsIgnoreCase("player_exp_formatted"))
+            return main.levelUtils().roundtoK(playerLevel.getExp());
+
         if (identifier.equalsIgnoreCase("player_exp_required"))
             return main.levelUtils().roundStringDecimal(playerLevel.nextExpRequirement());
 
         if (identifier.equalsIgnoreCase("player_exp_remaining"))
             return main.levelUtils().roundStringDecimal(playerLevel.nextExpRequirement() -
+                    playerLevel.getExp());
+
+        if (identifier.equalsIgnoreCase("player_exp_required_formatted"))
+            return main.levelUtils().roundtoK(playerLevel.nextExpRequirement());
+
+        if (identifier.equalsIgnoreCase("player_exp_remaining_formatted"))
+            return main.levelUtils().roundtoK(playerLevel.nextExpRequirement() -
                     playerLevel.getExp());
 
         if (identifier.equalsIgnoreCase("player_exp_progress_bar"))

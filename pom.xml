@@ -113,12 +113,5 @@
             <version>8.0.33</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>me.rivaldev.harvesterhoes</groupId>
-            <artifactId>RivalHarvesterHoesAPI</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/RivalHarvesterHoesAPI.jar</systemPath>
-        </dependency>
     </dependencies>
 </project>
