@@ -1,6 +1,7 @@
 package net.zerotoil.dev.cyberlevels.objects.leaderboard;
 
 import net.zerotoil.dev.cyberlevels.CyberLevels;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -28,19 +29,21 @@ public class Leaderboard {
 
 
     public void updateLeaderboard() {
-        topTenPlayers = loadingList;
-        updating = true;
+        Bukkit.getScheduler().runTaskAsynchronously(main,()->{
+                topTenPlayers = loadingList;
+            updating = true;
 
-        List<LeaderboardPlayer> allPlayers;
-        if (main.levelCache().getMySQL() != null && main.levelCache().getMySQL().isConnected()) {
-            allPlayers = main.levelCache().getMySQL().getAllPlayers();
-        } else {
-            allPlayers = getFlatFileLeaderboard();
-        }
-        if (allPlayers != null)
-            topTenPlayers = generateLeaderboard(allPlayers);
+            List<LeaderboardPlayer> allPlayers;
+            if (main.levelCache().getMySQL() != null && main.levelCache().getMySQL().isConnected()) {
+                allPlayers = main.levelCache().getMySQL().getAllPlayers();
+            } else {
+                allPlayers = getFlatFileLeaderboard();
+            }
+            if (allPlayers != null)
+                topTenPlayers = generateLeaderboard(allPlayers);
 
-        updating = false;
+            updating = false;
+        });
     }
 
     private List<LeaderboardPlayer> getFlatFileLeaderboard() {

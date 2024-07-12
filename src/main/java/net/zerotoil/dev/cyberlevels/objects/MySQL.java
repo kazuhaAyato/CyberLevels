@@ -3,6 +3,7 @@ package net.zerotoil.dev.cyberlevels.objects;
 import net.zerotoil.dev.cyberlevels.CyberLevels;
 import net.zerotoil.dev.cyberlevels.objects.leaderboard.LeaderboardPlayer;
 import net.zerotoil.dev.cyberlevels.objects.levels.PlayerData;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.*;
@@ -140,8 +141,14 @@ public class MySQL {
 
     // places in player if doesnt exists and updates data
     public void updatePlayer(Player player) {
-
+        //Async
+        if(Bukkit.isPrimaryThread()){
+            throw new IllegalArgumentException("Cannot update player data on main thread.");
+        }
         if (!playerInTable(player)) addPlayer(player, true);
+        if(main.levelCache().playerLevels().get(player) == null){
+            return;
+        }
 
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE " + table + " SET LEVEL=? WHERE UUID=?");
@@ -166,7 +173,9 @@ public class MySQL {
     }
 
     public PlayerData getPlayerData(Player player) {
-
+        if (Bukkit.isPrimaryThread()){
+            throw new IllegalArgumentException("Cannot get player data on main thread.");
+        }
         if (!playerInTable(player)) addPlayer(player, true);
 
         try {
@@ -208,6 +217,9 @@ public class MySQL {
 
 
     private void addPlayer(Player player, boolean defaultValues) {
+        if (Bukkit.isPrimaryThread()){
+            throw new IllegalArgumentException("Cannot get player data on main thread.");
+        }
         if (playerInTable(player)) return;
 
         String level = main.levelCache().startLevel() + "";

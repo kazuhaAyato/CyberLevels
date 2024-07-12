@@ -151,7 +151,7 @@ public class LevelCache {
                     startAutoSave();
                 });
             }
-        }).runTaskLater(main, 20L * Math.max(1, main.files().getConfig("config").getLong("config.auto-save.interval")));
+        }).runTaskLaterAsynchronously(main, 20L * Math.max(1, main.files().getConfig("config").getLong("config.auto-save.interval")));
     }
 
     public void clearLevelData() {
@@ -160,6 +160,7 @@ public class LevelCache {
 
     public void loadPlayer(Player player) {
         PlayerData playerData;
+        // Async
         String uuid = player.getUniqueId().toString();
 
         if (mySQL == null) {
@@ -202,7 +203,7 @@ public class LevelCache {
                 main.logger("&cFailed to save data for " + player.getName() + ".");
             }
         }
-        else mySQL.updatePlayer(player);
+        else Bukkit.getScheduler().runTaskAsynchronously(main,()->mySQL.updatePlayer(player));
         if (clearData) playerLevels.remove(player);
     }
 
@@ -211,7 +212,7 @@ public class LevelCache {
         main.logger("&dLoading data for online players...");
         long startTime = System.currentTimeMillis(), counter = 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            loadPlayer(player);
+            Bukkit.getScheduler().runTaskAsynchronously(main,()->loadPlayer(player));
             counter++;
         }
         main.logger("&7Loaded data for &e" + counter + " &7online player(s) in &a" + (System.currentTimeMillis() - startTime) + "ms&7.", "");

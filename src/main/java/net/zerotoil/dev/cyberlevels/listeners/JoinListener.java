@@ -18,7 +18,7 @@ public class JoinListener implements Listener {
 
     @EventHandler
     private void onJoin(PlayerJoinEvent event) {
-        main.levelCache().loadPlayer(event.getPlayer());
+        Bukkit.getScheduler().runTaskAsynchronously(main,()->main.levelCache().loadPlayer(event.getPlayer()));
     }
 
     @EventHandler
